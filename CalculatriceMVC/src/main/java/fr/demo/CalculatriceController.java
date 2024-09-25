@@ -50,7 +50,13 @@ public class CalculatriceController {
                             model.setResultat(model.division(firstNb, secondNb));
                             break;
                     }
-                    view.getEcran().setText(String.valueOf(model.getResultat()));
+                    // Pour afficher les résultats entier sans .0
+                    double resultat = model.getResultat();
+                    if (resultat == (int) resultat) {
+                        view.getEcran().setText(String.valueOf((int) resultat));  // Affiche en tant qu'entier
+                    } else {
+                        view.getEcran().setText(String.valueOf(resultat));  // Affiche le résultat avec les décimales
+                    }
                 } catch (ArithmeticException ex) {
                     view.getEcran().setText("Erreur : Division par zéro");
                 }
