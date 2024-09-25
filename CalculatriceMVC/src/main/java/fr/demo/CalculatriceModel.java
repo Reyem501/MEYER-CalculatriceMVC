@@ -22,7 +22,7 @@ public class CalculatriceModel {
     // Division
     public double division(double a, double b) throws ArithmeticException {
         if (b == 0) {
-            throw new ArithmeticException("Erreur : Division par zéro");
+            throw new ArithmeticException("Erreur : Division par zéro"); // Vérification de la division par 0
         }
         return a / b;
     }
