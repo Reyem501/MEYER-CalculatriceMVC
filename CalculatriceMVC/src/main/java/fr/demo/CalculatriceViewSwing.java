@@ -1,4 +1,3 @@
-/*
 package fr.demo;
 
 import javax.swing.*;
@@ -90,4 +89,3 @@ public class CalculatriceViewSwing extends JFrame {
         return clear;
     }
 }
-*/
