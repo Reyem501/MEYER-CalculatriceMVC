@@ -123,37 +123,46 @@ public class CalculatriceController {
         view.getMultiplication().setOnAction(new OperateurListener("*"));
         view.getDivision().setOnAction(new OperateurListener("/"));
 
-        // Écouteur pour le bouton égal
+// Écouteur pour le bouton égal
         view.getEgal().setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                double secondNb = Double.parseDouble(view.getEcran().getText());
-                try {
-                    switch (operateur) {
-                        case "+":
-                            model.setResultat(model.addition(firstNb, secondNb));
-                            break;
-                        case "-":
-                            model.setResultat(model.soustraction(firstNb, secondNb));
-                            break;
-                        case "*":
-                            model.setResultat(model.multiplication(firstNb, secondNb));
-                            break;
-                        case "/":
-                            model.setResultat(model.division(firstNb, secondNb));
-                            break;
+                if (operateur.isEmpty()) {
+                    // Si aucun opérateur n'a été sélectionné, afficher simplement le nombre actuel
+                    view.getEcran().setText(view.getEcran().getText());
+                } else {
+                    // Si un opérateur a été sélectionné, effectuer le calcul
+                    double secondNb = Double.parseDouble(view.getEcran().getText());
+                    try {
+                        switch (operateur) {
+                            case "+":
+                                model.setResultat(model.addition(firstNb, secondNb));
+                                break;
+                            case "-":
+                                model.setResultat(model.soustraction(firstNb, secondNb));
+                                break;
+                            case "*":
+                                model.setResultat(model.multiplication(firstNb, secondNb));
+                                break;
+                            case "/":
+                                model.setResultat(model.division(firstNb, secondNb));
+                                break;
+                        }
+                        double resultat = model.getResultat();
+                        if (resultat == (int) resultat) {
+                            // Si le résultat est un entier, l'afficher sans virgule
+                            view.getEcran().setText(String.valueOf((int) resultat));
+                        } else {
+                            // Sinon, afficher le résultat avec les décimales
+                            view.getEcran().setText(String.valueOf(resultat));
+                        }
+                    } catch (ArithmeticException ex) {
+                        view.getEcran().setText("Erreur : Division par zéro");
                     }
-                    double resultat = model.getResultat();
-                    if (resultat == (int) resultat) {
-                        view.getEcran().setText(String.valueOf((int) resultat));
-                    } else {
-                        view.getEcran().setText(String.valueOf(resultat));
-                    }
-                } catch (ArithmeticException ex) {
-                    view.getEcran().setText("Erreur : Division par zéro");
                 }
             }
         });
+
 
         // Écouteur pour le bouton clear
         view.getClear().setOnAction(new EventHandler<ActionEvent>() {
