@@ -1,15 +1,16 @@
+/*
 package fr.demo;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CalculatriceView extends JFrame {
+public class CalculatriceViewSwing extends JFrame {
 
     private JTextField ecran;
     private JButton[] chiffres;
     private JButton addition, soustraction, multiplication, division, egal, clear;
 
-    public CalculatriceView() {
+    public CalculatriceViewSwing() {
         setTitle("MEYER - CalculatriceMVC");
         setSize(400, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,3 +90,4 @@ public class CalculatriceView extends JFrame {
         return clear;
     }
 }
+*/
