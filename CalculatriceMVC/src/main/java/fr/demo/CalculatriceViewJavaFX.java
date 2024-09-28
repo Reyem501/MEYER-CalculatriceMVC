@@ -70,7 +70,7 @@ public class CalculatriceViewJavaFX extends Application {
 
         // Instanciation du modèle et du contrôleur
         CalculatriceModel model = new CalculatriceModel();
-        CalculatriceController controller = new CalculatriceController(model, this); // "this" passe la vue
+        JavaFXController controller = new JavaFXController(model, this); // "this" passe la vue
     }
 
 
