@@ -6,31 +6,30 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.application.Application;
 
-public class CalculatriceViewJavaFX extends Application {
+public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInterface {
 
     private TextField ecran;
     private Button[] chiffres;
     private Button addition, soustraction, multiplication, division, egal, clear;
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("MEYER - CalculatriceMVC avec JavaFX");
+    public CalculatriceViewJavaFX() {
+
+        this.setTitle("MEYER - CalculatriceMVC avec JavaFX");
 
         // Création de l'écran d'affichage
         ecran = new TextField();
         ecran.setEditable(false);
         ecran.setStyle("-fx-font-size: 30; -fx-alignment: center-right;");
 
-        // Création des boutons numériques
+        // Création des boutons de chiffre
         chiffres = new Button[10];
         for (int i = 0; i < 10; i++) {
             chiffres[i] = new Button(String.valueOf(i));
             chiffres[i].setMinSize(70, 50);
         }
 
-        // Création des boutons d'opérations
+        // Création des boutons d'opération
         addition = new Button("+");
         soustraction = new Button("-");
         multiplication = new Button("*");
@@ -45,7 +44,7 @@ public class CalculatriceViewJavaFX extends Application {
         gridPane.setVgap(10);
 
         // Positionnement des boutons dans le GridPane
-        gridPane.add(ecran, 0, 0, 4, 1); // L'écran occupe 4 colonnes
+        gridPane.add(ecran, 0, 0, 4, 1);
 
         int buttonIndex = 1;
         for (int row = 1; row < 4; row++) {
@@ -65,44 +64,49 @@ public class CalculatriceViewJavaFX extends Application {
 
         // Création de la scène
         Scene scene = new Scene(gridPane, 400, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        // Instanciation du modèle et du contrôleur
-        CalculatriceModel model = new CalculatriceModel();
-        JavaFXController controller = new JavaFXController(model, this); // "this" passe la vue
+        this.setScene(scene);
     }
 
-
-    public TextField getEcran() {
-        return ecran;
+    @Override
+    public void setEcranText(String text) {
+        ecran.setText(text);
     }
 
-    public Button[] getChiffres() {
-        return chiffres;
+    @Override
+    public String getEcranText() {
+        return ecran.getText();
     }
 
-    public Button getAddition() {
-        return addition;
+    @Override
+    public void addChiffreListener(int chiffre, Runnable listener) {
+        chiffres[chiffre].setOnAction(e -> listener.run());
     }
 
-    public Button getSoustraction() {
-        return soustraction;
+    @Override
+    public void addOperationListener(String operation, Runnable listener) {
+        switch (operation) {
+            case "+":
+                addition.setOnAction(e -> listener.run());
+                break;
+            case "-":
+                soustraction.setOnAction(e -> listener.run());
+                break;
+            case "*":
+                multiplication.setOnAction(e -> listener.run());
+                break;
+            case "/":
+                division.setOnAction(e -> listener.run());
+                break;
+        }
     }
 
-    public Button getMultiplication() {
-        return multiplication;
+    @Override
+    public void addEgalListener(Runnable listener) {
+        egal.setOnAction(e -> listener.run());
     }
 
-    public Button getDivision() {
-        return division;
-    }
-
-    public Button getEgal() {
-        return egal;
-    }
-
-    public Button getClear() {
-        return clear;
+    @Override
+    public void addClearListener(Runnable listener) {
+        clear.setOnAction(e -> listener.run());
     }
 }
