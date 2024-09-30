@@ -34,8 +34,13 @@ public class CalculatriceController {
                 case "/" -> model.division(firstNb, secondNb);
                 default -> 0;
             };
-            view.setEcranText(String.valueOf(result));
-        });
+
+            // Vérification pour afficher un nb entier ou un nb flottant
+            if (result == (long) result) {
+                view.setEcranText(String.valueOf((long) result));
+            } else {
+                view.setEcranText(String.valueOf(result));
+            }        });
 
         view.addClearListener(() -> view.setEcranText("")); // Listener du bouton clear
     }
