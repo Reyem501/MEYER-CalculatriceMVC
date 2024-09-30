@@ -5,7 +5,8 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Afficher une boîte de dialogue pour permettre à l'utilisateur de choisir entre Swing et JavaFX
+
+        // Affichage d'une boîte de dialogue pour choisir entre Swing et JavaFX
         Object[] options = {"JavaFX", "Swing"};
         int choix = JOptionPane.showOptionDialog(
                 null,
@@ -19,13 +20,13 @@ public class Main {
         );
 
         if (choix == 0) {
-            // L'utilisateur choisit JavaFX
-            Application.launch(CalculatriceViewJavaFX.class, args);
+            // Lance JavaFX
+            Application.launch(JavaFXLauncher.class, args);
         } else if (choix == 1) {
-            // L'utilisateur choisit Swing
+            // Lance Swing
             CalculatriceModel model = new CalculatriceModel();
             CalculatriceViewSwing view = new CalculatriceViewSwing();
-            SwingController controller = new SwingController(model, view);
+            new CalculatriceController(model, view);
             view.setVisible(true);
         } else {
             System.exit(0);
