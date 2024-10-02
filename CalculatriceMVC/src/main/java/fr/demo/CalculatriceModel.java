@@ -4,6 +4,17 @@ public class CalculatriceModel {
 
     private double resultat;
 
+    // Calculer en fonction de l'opérateur
+    public double calculer(double a, double b, String operateur) throws ArithmeticException {
+        return switch (operateur) {
+            case "+" -> addition(a, b);
+            case "-" -> soustraction(a, b);
+            case "*" -> multiplication(a, b);
+            case "/" -> division(a, b);
+            default -> throw new IllegalArgumentException("Opérateur inconnu : " + operateur);
+        };
+    }
+
     // Addition
     public double addition(double a, double b) {
         return a + b;
@@ -19,21 +30,22 @@ public class CalculatriceModel {
         return a * b;
     }
 
-    // Division
+    // Division (avec gestion de la division par zéro)
     public double division(double a, double b) throws ArithmeticException {
         if (b == 0) {
-            throw new ArithmeticException("Erreur : Division par zéro"); // Vérification de la division par 0
+            throw new ArithmeticException("Erreur : Division par zéro");
         }
         return a / b;
     }
 
-    // Getter
+    // Getter pour le résultat
     public double getResultat() {
         return resultat;
     }
 
-    // Setter
+    // Setter pour le résultat
     public void setResultat(double resultat) {
         this.resultat = resultat;
     }
 }
+
