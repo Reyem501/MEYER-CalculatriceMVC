@@ -11,7 +11,7 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
 
     private TextField ecran;
     private Button[] chiffres;
-    private Button addition, soustraction, multiplication, division, egal, clear;
+    private Button addition, soustraction, multiplication, division, egal, clear, point, signe, puissance, racine;
 
     public CalculatriceViewJavaFX() {
 
@@ -36,6 +36,11 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
         division = new Button("/");
         egal = new Button("=");
         clear = new Button("C");
+        point = new Button(".");
+        signe = new Button("±");
+        puissance = new Button("^");
+        racine = new Button("√");
+
 
         // Configuration du GridPane pour organiser les boutons
         GridPane gridPane = new GridPane();
@@ -57,10 +62,15 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
         gridPane.add(chiffres[0], 0, 4);
         gridPane.add(egal, 1, 4);
         gridPane.add(clear, 2, 4);
+        gridPane.add(point, 2, 5);
+        gridPane.add(signe, 0, 5);
         gridPane.add(addition, 3, 1);
         gridPane.add(soustraction, 3, 2);
         gridPane.add(multiplication, 3, 3);
         gridPane.add(division, 3, 4);
+        gridPane.add(puissance, 3, 5);
+        gridPane.add(racine, 3, 6);
+
 
         // Création de la scène
         Scene scene = new Scene(gridPane, 400, 600);
@@ -97,6 +107,12 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
             case "/":
                 division.setOnAction(e -> listener.run());
                 break;
+            case "^":
+                puissance.setOnAction(e -> listener.run());
+                break;
+            case "√":
+                racine.setOnAction(e -> listener.run());
+                break;
         }
     }
 
@@ -108,5 +124,15 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
     @Override
     public void addClearListener(Runnable listener) {
         clear.setOnAction(e -> listener.run());
+    }
+
+    @Override
+    public void addPointListener(Runnable listener) {
+        point.setOnAction(e -> listener.run());
+    }
+
+    @Override
+    public void addSigneListener(Runnable listener) {
+        signe.setOnAction(e -> listener.run());
     }
 }
