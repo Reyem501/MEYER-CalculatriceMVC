@@ -10,4 +10,6 @@ public interface CalculatriceViewInterface {
     void addOperationListener(String operation, Runnable listener);
     void addEgalListener(Runnable listener);
     void addClearListener(Runnable listener);
+    void addPointListener(Runnable listener);
+    void addSigneListener(Runnable listener);
 }
