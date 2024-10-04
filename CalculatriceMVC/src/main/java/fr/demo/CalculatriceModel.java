@@ -1,64 +1,80 @@
 package fr.demo;
 
-public class CalculatriceController {
+public class CalculatriceModel {
 
-    private final CalculatriceViewInterface view;
-    private String operateur = "";
-    private double firstNb = 0;
+    private double resultat;
 
-    public CalculatriceController(CalculatriceModel model, CalculatriceViewInterface view) {
-
-        this.view = view;
-
-        for (int i = 0; i < 10; i++) {
-            int chiffre = i;
-                view.addChiffreListener(chiffre, () -> {    // Listeners des boutons de chiffre
-                String text = view.getEcranText();
-                view.setEcranText(text + chiffre);
-            });
-        }
-
-        // Listeners des boutons d'opération
-        view.addOperationListener("+", () -> setOperateur("+"));
-        view.addOperationListener("-", () -> setOperateur("-"));
-        view.addOperationListener("*", () -> setOperateur("*"));
-        view.addOperationListener("/", () -> setOperateur("/"));
-
-        // Listener du bouton =
-        view.addEgalListener(() -> {
-            double secondNb = Double.parseDouble(view.getEcranText());
-
-            try {
-                double result = model.calculer(firstNb, secondNb, operateur);
-
-                // Vérification pour afficher un nb entier ou un nb flottant
-                if (result == (long) result) {
-                    view.setEcranText(String.valueOf((long) result));
-                } else {
-                    view.setEcranText(String.valueOf(result));
-                }
-            } catch (ArithmeticException e) {
-                // Gestion erreurs mathématiques
-                view.setEcranText("Erreur");
-            }
-        });
-
-        // Listener du bouton clear
-        view.addClearListener(() -> view.setEcranText(""));
-        // Gestion du changement de signe
-        view.addSigneListener(() -> {
-            String currentText = view.getEcranText();
-            if (!currentText.isEmpty()) {
-                double currentValue = Double.parseDouble(currentText);
-                currentValue *= -1;  // Permet d'inverser le signe
-                view.setEcranText(String.valueOf(currentValue));
-            }
-        });
+    // Calculer en fonction de l'opérateur
+    public double calculer(double a, double b, String operateur) throws ArithmeticException {
+        return switch (operateur) {
+            case "+" -> addition(a, b);
+            case "-" -> soustraction(a, b);
+            case "*" -> multiplication(a, b);
+            case "/" -> division(a, b);
+            case "^" -> puissance(a, b);
+            default -> throw new IllegalArgumentException("Opérateur inconnu : " + operateur);
+        };
     }
 
-    private void setOperateur(String operateur) {
-        firstNb = Double.parseDouble(view.getEcranText());
-        this.operateur = operateur;
-        view.setEcranText("");
+    // Addition
+    public double addition(double a, double b) throws ArithmeticException {
+        double result = a + b;
+        if (Double.isInfinite(result)) {
+            throw new ArithmeticException("Erreur : Résultat trop long");
+        }
+        return result;
+    }
+
+    // Soustraction
+    public double soustraction(double a, double b) {
+        return a - b;
+    }
+
+    // Multiplication
+    public double multiplication(double a, double b) throws ArithmeticException {
+        double result = a * b;
+
+        if (Double.isInfinite(result)) {
+            throw new ArithmeticException("Erreur : Résultat trop long");
+        }
+        return result;
+    }
+
+    // Division (avec gestion de la division par zéro)
+    public double division(double a, double b) throws ArithmeticException {
+        if (b == 0) {
+            throw new ArithmeticException("Erreur : Division par zéro");
+        }
+        return a / b;
+    }
+
+    // Puissance d'un chiffre
+    public double puissance(double base, double exposant) {
+        double result = Math.pow(base, exposant);
+
+        if (Double.isInfinite(result)) {
+            throw new ArithmeticException("Erreur : Résultat trop long");
+        }
+        return result;
+    }
+
+    // Racine d'un chiffre
+    public double racine(double a) {
+        if (a < 0) {
+            throw new ArithmeticException("Erreur : Racine carrée d'un nombre négatif");
+        }
+        return Math.sqrt(a);
+    }
+
+
+    // Getter pour le résultat
+    public double getResultat() {
+        return resultat;
+    }
+
+    // Setter pour le résultat
+    public void setResultat(double resultat) {
+        this.resultat = resultat;
     }
 }
+
