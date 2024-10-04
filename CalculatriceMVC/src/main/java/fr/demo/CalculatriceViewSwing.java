@@ -7,7 +7,7 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
 
     private JTextField ecran;
     private JButton[] chiffres;
-    private JButton addition, soustraction, multiplication, division, egal, clear;
+    private JButton addition, soustraction, multiplication, division, egal, clear, point, signe, puissance, racine;
 
     // Construction de la view Swing
     public CalculatriceViewSwing() {
@@ -33,9 +33,14 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
         division = new JButton("/");
         egal = new JButton("=");
         clear = new JButton("C");
+        point = new JButton(".");
+        signe = new JButton("±");
+        puissance = new JButton("^");
+        racine = new JButton("√");
+
 
         // Création du JPanel
-        JPanel panel = new JPanel(new GridLayout(4, 4, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(5, 4, 10, 10));
         for (int i = 1; i < 10; i++) {
             panel.add(chiffres[i]);
         }
@@ -45,8 +50,13 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
         panel.add(multiplication);
         panel.add(division);
         panel.add(chiffres[0]);
+        panel.add(signe);
         panel.add(egal);
         panel.add(clear);
+        panel.add(point);
+        panel.add(puissance);
+        panel.add(racine);
+
 
         this.setLayout(new BorderLayout());
         this.add(ecran, BorderLayout.NORTH);
@@ -83,8 +93,15 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
             case "/":
                 division.addActionListener(e -> listener.run());
                 break;
+            case "^":
+                puissance.addActionListener(e -> listener.run());
+                break;
+            case "√":
+                racine.addActionListener(e -> listener.run());
+                break;
         }
     }
+
 
     @Override
     public void addEgalListener(Runnable listener) {
@@ -94,5 +111,15 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
     @Override
     public void addClearListener(Runnable listener) {
         clear.addActionListener(e -> listener.run());
+    }
+
+    @Override
+    public void addPointListener(Runnable listener) {
+        point.addActionListener(e -> listener.run());
+    }
+
+    @Override
+    public void addSigneListener(Runnable listener) {
+        signe.addActionListener(e -> listener.run());
     }
 }
