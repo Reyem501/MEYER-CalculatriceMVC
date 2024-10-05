@@ -24,6 +24,7 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
         chiffres = new JButton[10];
         for (int i = 0; i < 10; i++) {
             chiffres[i] = new JButton(String.valueOf(i));
+            chiffres[i].setFont(new Font("Arial", Font.PLAIN, 20));
         }
 
         // Création des boutons d'opération
@@ -38,30 +39,58 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
         puissance = new JButton("^");
         racine = new JButton("√");
 
+        // Création du JPanel avec un GridLayout 6x4
+        JPanel panel = new JPanel(new GridLayout(6, 4, 10, 10));
 
-        // Création du JPanel
-        JPanel panel = new JPanel(new GridLayout(5, 4, 10, 10));
-        for (int i = 1; i < 10; i++) {
-            panel.add(chiffres[i]);
-        }
-
-        panel.add(addition);
-        panel.add(soustraction);
-        panel.add(multiplication);
-        panel.add(division);
-        panel.add(chiffres[0]);
-        panel.add(signe);
-        panel.add(egal);
-        panel.add(clear);
-        panel.add(point);
+        // Ajout des boutons dans le panel
+        puissance.setFont(new Font("Arial", Font.BOLD, 20));
         panel.add(puissance);
+        signe.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(signe);
+        racine.setFont(new Font("Arial", Font.BOLD, 20));
         panel.add(racine);
+        division.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(division);
 
+        panel.add(chiffres[7]);
+        panel.add(chiffres[8]);
+        panel.add(chiffres[9]);
+        multiplication.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(multiplication);
+
+        panel.add(chiffres[4]);
+        panel.add(chiffres[5]);
+        panel.add(chiffres[6]);
+        soustraction.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(soustraction);
+
+        panel.add(chiffres[1]);
+        panel.add(chiffres[2]);
+        panel.add(chiffres[3]);
+        addition.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(addition);
+
+        panel.add(chiffres[0]);
+        point.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(point);
+
+        // bouton clear en rouge
+        clear.setBackground(Color.RED);
+        clear.setForeground(Color.WHITE);
+        clear.setFont(new Font("Arial", Font.BOLD, 20));
+        // bouton egal en vert
+        egal.setBackground(Color.GREEN);
+        egal.setForeground(Color.WHITE);
+        egal.setFont(new Font("Arial", Font.BOLD, 20));
+
+        panel.add(clear);
+        panel.add(egal);
 
         this.setLayout(new BorderLayout());
         this.add(ecran, BorderLayout.NORTH);
         this.add(panel, BorderLayout.CENTER);
     }
+
 
     @Override
     public void setEcranText(String text) {
