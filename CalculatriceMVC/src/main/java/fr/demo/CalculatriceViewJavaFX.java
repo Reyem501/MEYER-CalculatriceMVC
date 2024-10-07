@@ -11,7 +11,7 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
 
     private TextField ecran;
     private Button[] chiffres;
-    private Button addition, soustraction, multiplication, division, egal, clear, point, signe, puissance, racine;
+    private Button addition, soustraction, multiplication, division, PI, egal, clear, point, signe, puissance, racine, arrondir;
 
     // Construction de la vue JavaFX
     public CalculatriceViewJavaFX() {
@@ -28,7 +28,7 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
         for (int i = 0; i < 10; i++) {
             chiffres[i] = new Button(String.valueOf(i));
             chiffres[i].setMinSize(70, 50);
-            chiffres[i].setStyle("-fx-font-size: 20px;");  // Définit la taille de la police à 20px
+            chiffres[i].setStyle("-fx-font-size: 20px;");  // Définit la taille de la police à 20px pour tout les chiffres
 
         }
 
@@ -37,12 +37,14 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
         soustraction = new Button("-");
         multiplication = new Button("*");
         division = new Button("/");
+        PI = new Button("π");
         egal = new Button("=");
         clear = new Button("C");
         point = new Button(".");
         signe = new Button("±");
         puissance = new Button("^");
         racine = new Button("√");
+        arrondir = new Button("Arr");
 
         // Configuration du la GridPane
         GridPane gridPane = new GridPane();
@@ -81,13 +83,17 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
         gridPane.add(addition, 3, 4);
 
         gridPane.add(chiffres[0], 0, 5);
+        PI.setStyle("-fx-font-size: 20px;");
+        gridPane.add(PI, 1, 5);
         point.setStyle("-fx-font-size: 20px;");
-        gridPane.add(point, 1, 5);
+        gridPane.add(point, 2, 5);
+        arrondir.setStyle("-fx-font-size: 20px;");
+        gridPane.add(arrondir, 3, 5);
 
         clear.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 20;");  // bouton clear en rouge
-        gridPane.add(clear, 2, 5);
+        gridPane.add(clear, 2, 6);
         egal.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-size: 20;"); // bouton egal en vert
-        gridPane.add(egal, 3, 5);
+        gridPane.add(egal, 3, 6);
 
         // Création de la scène
         Scene scene = new Scene(gridPane, 400, 600);
@@ -135,6 +141,11 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
     }
 
     @Override
+    public void addPIListener(Runnable listener) {
+        PI.setOnAction(e -> listener.run());
+    }
+
+    @Override
     public void addEgalListener(Runnable listener) {
         egal.setOnAction(e -> listener.run());
     }
@@ -152,5 +163,10 @@ public class CalculatriceViewJavaFX extends Stage implements CalculatriceViewInt
     @Override
     public void addSigneListener(Runnable listener) {
         signe.setOnAction(e -> listener.run());
+    }
+
+    @Override
+    public void addArrondirListener(Runnable listener) {
+        arrondir.setOnAction(e -> listener.run());
     }
 }
