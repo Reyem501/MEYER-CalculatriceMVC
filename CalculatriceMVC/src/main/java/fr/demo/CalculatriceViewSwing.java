@@ -7,7 +7,7 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
 
     private JTextField ecran;
     private JButton[] chiffres;
-    private JButton addition, soustraction, multiplication, division, egal, clear, point, signe, puissance, racine;
+    private JButton addition, soustraction, multiplication, division, PI, egal, clear, point, signe, puissance, racine, arrondir;
 
     // Construction de la view Swing
     public CalculatriceViewSwing() {
@@ -32,12 +32,14 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
         soustraction = new JButton("-");
         multiplication = new JButton("*");
         division = new JButton("/");
+        PI = new JButton("π");
         egal = new JButton("=");
         clear = new JButton("C");
         point = new JButton(".");
         signe = new JButton("±");
         puissance = new JButton("^");
         racine = new JButton("√");
+        arrondir = new JButton("Arr");
 
         // Création du JPanel avec un GridLayout 6x4
         JPanel panel = new JPanel(new GridLayout(6, 4, 10, 10));
@@ -71,19 +73,21 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
         panel.add(addition);
 
         panel.add(chiffres[0]);
+        PI.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(PI);
         point.setFont(new Font("Arial", Font.BOLD, 20));
         panel.add(point);
+        arrondir.setFont(new Font("Arial", Font.BOLD, 20));
+        panel.add(arrondir);
 
-        // bouton clear en rouge
-        clear.setBackground(Color.RED);
+        clear.setBackground(Color.RED); // bouton clear en rouge
         clear.setForeground(Color.WHITE);
         clear.setFont(new Font("Arial", Font.BOLD, 20));
-        // bouton egal en vert
-        egal.setBackground(Color.GREEN);
+        panel.add(clear);
+
+        egal.setBackground(Color.GREEN);    // bouton egal en vert
         egal.setForeground(Color.WHITE);
         egal.setFont(new Font("Arial", Font.BOLD, 20));
-
-        panel.add(clear);
         panel.add(egal);
 
         this.setLayout(new BorderLayout());
@@ -131,6 +135,10 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
         }
     }
 
+    @Override
+    public void addPIListener(Runnable listener) {
+        PI.addActionListener(e -> listener.run());
+    }
 
     @Override
     public void addEgalListener(Runnable listener) {
@@ -150,5 +158,10 @@ public class CalculatriceViewSwing extends JFrame implements CalculatriceViewInt
     @Override
     public void addSigneListener(Runnable listener) {
         signe.addActionListener(e -> listener.run());
+    }
+
+    @Override
+    public void addArrondirListener(Runnable listener) {
+        arrondir.addActionListener(e -> listener.run());
     }
 }
