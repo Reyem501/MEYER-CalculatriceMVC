@@ -1,18 +1,24 @@
 package fr.demo;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class CalculatriceController {
 
     private final CalculatriceViewInterface view;
     private String operateur = "";
-    private double firstNb = 0;
+    private BigDecimal firstNb = BigDecimal.ZERO;
+    private final CalculatriceModel model;
 
     public CalculatriceController(CalculatriceModel model, CalculatriceViewInterface view) {
 
         this.view = view;
+        this.model = model;
 
+        // Listeners pour les boutons de chiffres
         for (int i = 0; i < 10; i++) {
             int chiffre = i;
-                view.addChiffreListener(chiffre, () -> {    // Listeners des boutons de chiffre
+            view.addChiffreListener(chiffre, () -> {    // Listeners des boutons de chiffre
                 String text = view.getEcranText();
                 view.setEcranText(text + chiffre);
             });
@@ -23,6 +29,7 @@ public class CalculatriceController {
         view.addOperationListener("-", () -> setOperateur("-"));
         view.addOperationListener("*", () -> setOperateur("*"));
         view.addOperationListener("/", () -> setOperateur("/"));
+
         view.addPointListener(() -> {
             String text = view.getEcranText();
             if (text.isEmpty()) {
@@ -35,18 +42,14 @@ public class CalculatriceController {
         view.addOperationListener("^", () -> setOperateur("^"));
 
         view.addOperationListener("√", () -> {
-            double number = Double.parseDouble(view.getEcranText());
+            BigDecimal number = new BigDecimal(view.getEcranText());
             try {
-                double result = model.racine(number);
+                BigDecimal result = model.racine(number);
 
-                // Vérification pour afficher un nb entier ou un nb flottant
-                if (result == (long) result) {
-                    view.setEcranText(String.valueOf((long) result));
-                } else {
-                    view.setEcranText(String.valueOf(result));
-                }
+                // Afficher le résultat sans zéros inutiles
+                view.setEcranText(result.stripTrailingZeros().toPlainString());
             } catch (ArithmeticException e) {
-                // Gestion racine d'un nombre négatif)
+                // Gestion racine d'un nombre négatif
                 view.setEcranText("Erreur : nombre négatif");
             }
         });
@@ -55,53 +58,44 @@ public class CalculatriceController {
 
         view.addArrondirListener(() -> {
             String text = view.getEcranText();
-
             try {
-                double result = Double.parseDouble(text);
-                double arrondiResult = Math.round(result * 1_000_000.0) / 1_000_000.0;  // Permet d'arrondir à 6 décimales
-
-                // Vérification pour afficher un nb entier ou un nb flottant
-                if (arrondiResult == (long) arrondiResult) {
-                    view.setEcranText(String.valueOf((long) arrondiResult));
-                } else {
-                    view.setEcranText(String.valueOf(arrondiResult));
-                }
+                BigDecimal result = new BigDecimal(text);
+                BigDecimal arrondiResult = result.setScale(6, RoundingMode.HALF_UP);  // Arrondi à 6 décimales
+                view.setEcranText(arrondiResult.stripTrailingZeros().toPlainString());
             } catch (NumberFormatException e) {
                 view.setEcranText("Erreur");
             }
         });
 
-        view.addEgalListener(() -> {
-            double secondNb = Double.parseDouble(view.getEcranText());
-
-            try {
-                double result = model.calculer(firstNb, secondNb, operateur);
-
-                // Vérification pour afficher un nb entier ou un nb flottant
-                if (result == (long) result) {
-                    view.setEcranText(String.valueOf((long) result));
-                } else {
-                    view.setEcranText(String.valueOf(result));
-                }
-            } catch (ArithmeticException e) {
-                // Gestion erreurs mathématiques
-                view.setEcranText("Erreur");
-            }
-        });
-
         view.addClearListener(() -> view.setEcranText(""));
+
         view.addSigneListener(() -> {
             String currentText = view.getEcranText();
             if (!currentText.isEmpty()) {
-                double currentValue = Double.parseDouble(currentText);
-                currentValue *= -1;  // Permet d'inverser le signe
-                view.setEcranText(String.valueOf(currentValue));
+                BigDecimal currentValue = new BigDecimal(currentText);
+                currentValue = currentValue.negate();  // Inverser le signe
+                view.setEcranText(currentValue.stripTrailingZeros().toPlainString());
+            }
+        });
+
+        view.addEgalListener(() -> {
+            BigDecimal secondNb = new BigDecimal(view.getEcranText());
+
+            try {
+                BigDecimal result = model.calculer(firstNb, secondNb, operateur);
+
+                // Afficher le résultat sans zéros inutiles
+                view.setEcranText(result.stripTrailingZeros().toPlainString());
+            } catch (ArithmeticException e) {
+                // Gestion des erreurs mathématiques
+                view.setEcranText("Erreur");
             }
         });
     }
 
+    // Méthode pour définir l'opérateur et sauvegarder le premier nombre
     private void setOperateur(String operateur) {
-        firstNb = Double.parseDouble(view.getEcranText());
+        firstNb = new BigDecimal(view.getEcranText());  // Stocker le premier nombre en BigDecimal
         this.operateur = operateur;
         view.setEcranText("");
     }
