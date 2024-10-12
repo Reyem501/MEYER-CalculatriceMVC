@@ -1,11 +1,16 @@
 package fr.demo;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 public class CalculatriceModel {
 
-    private double resultat;
+    private BigDecimal resultat;
+    private final MathContext mathContext = new MathContext(15); // Définir une précision générale
 
     // Calculer en fonction de l'opérateur
-    public double calculer(double a, double b, String operateur) throws ArithmeticException {
+    public BigDecimal calculer(BigDecimal a, BigDecimal b, String operateur) throws ArithmeticException {
         return switch (operateur) {
             case "+" -> addition(a, b);
             case "-" -> soustraction(a, b);
@@ -17,64 +22,58 @@ public class CalculatriceModel {
     }
 
     // Addition
-    public double addition(double a, double b) throws ArithmeticException {
-        double result = a + b;
-        if (Double.isInfinite(result)) {
-            throw new ArithmeticException("Erreur : Résultat trop long");
-        }
-        return result;
+    public BigDecimal addition(BigDecimal a, BigDecimal b) throws ArithmeticException {
+        BigDecimal result = a.add(b, mathContext);
+        return checkForOverflow(result);
     }
 
     // Soustraction
-    public double soustraction(double a, double b) {
-        return a - b;
+    public BigDecimal soustraction(BigDecimal a, BigDecimal b) {
+        return a.subtract(b, mathContext);
     }
 
     // Multiplication
-    public double multiplication(double a, double b) throws ArithmeticException {
-        double result = a * b;
-
-        if (Double.isInfinite(result)) {
-            throw new ArithmeticException("Erreur : Résultat trop long");
-        }
-        return result;
+    public BigDecimal multiplication(BigDecimal a, BigDecimal b) throws ArithmeticException {
+        BigDecimal result = a.multiply(b, mathContext);
+        return checkForOverflow(result);
     }
 
     // Division (avec gestion de la division par zéro)
-    public double division(double a, double b) throws ArithmeticException {
-        if (b == 0) {
+    public BigDecimal division(BigDecimal a, BigDecimal b) throws ArithmeticException {
+        if (b.compareTo(BigDecimal.ZERO) == 0) {
             throw new ArithmeticException("Erreur : Division par zéro");
         }
-        return a / b;
+        return a.divide(b, 15, RoundingMode.HALF_UP); // Division avec arrondi à 15 décimales
     }
 
     // Puissance d'un chiffre
-    public double puissance(double base, double exposant) {
-        double result = Math.pow(base, exposant);
+    public BigDecimal puissance(BigDecimal base, BigDecimal exposant) {
+        return BigDecimal.valueOf(Math.pow(base.doubleValue(), exposant.doubleValue()));
+    }
 
-        if (Double.isInfinite(result)) {
+    // Racine d'un chiffre
+    public BigDecimal racine(BigDecimal a) {
+        if (a.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ArithmeticException("Erreur : Racine carrée d'un nombre négatif");
+        }
+        return BigDecimal.valueOf(Math.sqrt(a.doubleValue()));
+    }
+
+    // Vérification d'un dépassement de capacité
+    private BigDecimal checkForOverflow(BigDecimal result) throws ArithmeticException {
+        if (result.abs().compareTo(new BigDecimal(Double.MAX_VALUE)) > 0) {
             throw new ArithmeticException("Erreur : Résultat trop long");
         }
         return result;
     }
 
-    // Racine d'un chiffre
-    public double racine(double a) {
-        if (a < 0) {
-            throw new ArithmeticException("Erreur : Racine carrée d'un nombre négatif");
-        }
-        return Math.sqrt(a);
-    }
-
-
     // Getter pour le résultat
-    public double getResultat() {
+    public BigDecimal getResultat() {
         return resultat;
     }
 
     // Setter pour le résultat
-    public void setResultat(double resultat) {
+    public void setResultat(BigDecimal resultat) {
         this.resultat = resultat;
     }
 }
-
