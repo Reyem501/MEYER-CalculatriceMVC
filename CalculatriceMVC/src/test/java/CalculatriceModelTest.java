@@ -62,4 +62,12 @@ public class CalculatriceModelTest {
                 result.stripTrailingZeros(), "La racine carrée de 9 devrait être 3");
     }
 
+
+    @Test
+    public void testRacineNbNegatif() {
+        CalculatriceModel model = new CalculatriceModel();
+        assertThrows(ArithmeticException.class, () -> {
+            model.racine(BigDecimal.valueOf(-9));
+        }, "La racine d'un nombre négatif devrait lancer une ArithmeticException");
+    }
 }
